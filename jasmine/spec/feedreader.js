@@ -86,6 +86,9 @@ $(function() {
         it('should at least be 1 entry', async function () {
             const feedContainer = document.querySelector('.feed');
 
+            // ensure that the feed container has no elements initially
+            feedContainer.innerHTML = '';
+
             expect(feedContainer.childElementCount).toBe(0);
 
             // load the feed
