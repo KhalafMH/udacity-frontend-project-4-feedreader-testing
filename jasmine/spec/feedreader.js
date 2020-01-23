@@ -8,11 +8,8 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
-$(function() {
-    /* This is our first test suite - a test suite just contains
-    * a related set of tests. This suite is all about the RSS
-    * feeds definitions, the allFeeds variable in our application.
-    */
+$(function () {
+
     describe('RSS Feeds', function () {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
@@ -98,12 +95,29 @@ $(function() {
         });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
 
-        /* TODO: Write a test that ensures when a new feed is loaded
+    describe("New Feed Selection", function () {
+
+        /* Ensures that when a new feed is loaded
          * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
          */
+        it('should result in loading new entries', async function () {
+            const feedContainer = document.querySelector('.feed');
+
+            // load the first feed
+            await new Promise(resolve => loadFeed(0, resolve));
+            expect(feedContainer.childElementCount).toBeGreaterThan(0);
+            const initialEntries = Array.from(feedContainer.querySelectorAll('.entry-link')).map(a => a.href);
+
+            // load the second feed
+            await new Promise(resolve => loadFeed(1, resolve));
+            expect(feedContainer.childElementCount).toBeGreaterThan(0);
+            const eventualEntries = Array.from(feedContainer.querySelectorAll('.entry-link')).map(a => a.href);
+
+            // expect the two to have different entries
+            expect(eventualEntries).not.toEqual(initialEntries);
+        });
+    });
 
     /**
      * Calls `clickable.click()` and then waits for `transitionable` to complete its transition.
