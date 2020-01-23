@@ -50,19 +50,32 @@ $(function() {
     });
 
 
-    /* TODO: Write a new test suite named "The menu" */
+    describe('The menu', function () {
 
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
-         */
+        it('is hidden by default', function () {
+            const menu = document.querySelector('.slide-menu');
+            expect(menu.getBoundingClientRect().right).toBeLessThanOrEqual(0);
+        });
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
+        it('changes visibility when clicked', async function () {
+            const menu = document.querySelector('.slide-menu');
+            const menuIcon = document.querySelector('.menu-icon-link');
+
+            // should be hidden
+            expect(menu.getBoundingClientRect().right).toBeLessThanOrEqual(0);
+
+            await clickAndWaitTransition(menuIcon, menu);
+
+            // should be visible
+            expect(menu.getBoundingClientRect().left).toBeGreaterThanOrEqual(0);
+
+            await clickAndWaitTransition(menuIcon, menu);
+
+            // should be hidden
+            expect(menu.getBoundingClientRect().right).toBeLessThanOrEqual(0);
+        })
+    });
+
 
     /* TODO: Write a new test suite named "Initial Entries" */
 
@@ -79,4 +92,15 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+
+    /**
+     * Calls `clickable.click()` and then waits for `transitionable` to complete its transition.
+     * @param clickable {HTMLElement} - The element to click.
+     * @param transitionable {HTMLElement} - The element to wait for to complete its transition.
+     * @returns {Promise<void>}
+     */
+    async function clickAndWaitTransition(clickable, transitionable) {
+        clickable.click();
+        await new Promise(resolve => transitionable.addEventListener('transitionend', resolve));
+    }
 }());
