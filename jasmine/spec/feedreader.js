@@ -86,12 +86,12 @@ $(function () {
             // ensure that the feed container has no elements initially
             feedContainer.innerHTML = '';
 
-            expect(feedContainer.childElementCount).toBe(0);
+            expect(feedContainer.querySelectorAll('.entry-link').length).toBe(0);
 
             // load the feed
             await new Promise(resolve => loadFeed(0, resolve));
 
-            expect(feedContainer.childElementCount).toBeGreaterThanOrEqual(1);
+            expect(feedContainer.querySelectorAll('.entry-link').length).toBeGreaterThanOrEqual(1);
         });
     });
 
